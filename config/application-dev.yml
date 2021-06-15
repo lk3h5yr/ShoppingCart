@@ -8,22 +8,15 @@ spring:
     password: admin
     hikari:
       connection-init-sql: SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
-  flyway:
-    schemas:
-    - testdb
-    default-schema: testdb
-    url: jdbc:mysql://127.0.0.1:3306
-    user: admin
-    password: admin
+#  flyway:
+#    schemas:
+#    - testdb
+#    default-schema: testdb
+#    url: jdbc:mysql://127.0.0.1:3306
+#    user: admin
+#    password: admin
 #    user: root
 #    password: pw123456
-
-#liquibase:
-#  change-log: classpath:/db/changelog/master.xml
-#  user: admin
-#  password: admin
-#  url: jdbc:mysql://127.0.0.1:3306/testdb?serverTimezone=UTC&useLegacyDatetimeCode=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
-#  drop-first: true
   
   jpa:
     hibernate:
@@ -71,3 +64,4 @@ management:
 goodsMgr:
    getAllGoodsesUrl: http://18.183.144.77:8080/goodses
    getGoodsByGoodsId: http://18.183.144.77:8080/goods/{0}
+   deleteGoodsIdUrl: http://18.183.144.77:8080/goodses/{0}

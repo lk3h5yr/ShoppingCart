@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import feign.Request.HttpMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -61,11 +62,11 @@ public class OpenAPIConfig {
          .securityContexts(this.securityContext())
          .securitySchemes(this.securitySchemes())
          .useDefaultResponseMessages(false)
-        // .additionalModels(new TypeResolver().resolve(ErrorMsg.class))
-        // .globalResponses(HttpMethod.GET, this.getGlobalResonseMessage())
-        // .globalResponses(HttpMethod.POST, this.getGlobalResonseMessage())
-        // .globalResponses(HttpMethod.PUT, this.getGlobalResonseMessage())
-        // .globalResponses(HttpMethod.DELETE, this.getGlobalResonseMessage())
+//         .additionalModels(new TypeResolver().resolve(ErrorMsg.class))
+//         .globalResponses(HttpMethod.GET, this.getGlobalResonseMessage())
+//         .globalResponses(HttpMethod.POST, this.getGlobalResonseMessage())
+//         .globalResponses(HttpMethod.PUT, this.getGlobalResonseMessage())
+//         .globalResponses(HttpMethod.DELETE, this.getGlobalResonseMessage())
         .apiInfo(this.apiInfo())
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.example.demo"))
@@ -107,18 +108,18 @@ public class OpenAPIConfig {
    */
   private List<Response> getGlobalResonseMessage() {
     List<Response> responseList = new ArrayList<>();
-    // responseList.add(this.createResponse(HttpStatus.BAD_REQUEST,
-    // HttpStatus.BAD_REQUEST.getReasonPhrase()));
-    // responseList.add(this.createResponse(HttpStatus.UNAUTHORIZED,
-    // HttpStatus.UNAUTHORIZED.getReasonPhrase()));
-    // responseList.add(this.createResponse(HttpStatus.FORBIDDEN,
-    // HttpStatus.FORBIDDEN.getReasonPhrase()));
-    // responseList.add(this.createResponse(HttpStatus.NOT_FOUND,
-    // HttpStatus.NOT_FOUND.getReasonPhrase()));
-    // responseList.add(this.createResponse(HttpStatus.CONFLICT,
-    // HttpStatus.CONFLICT.getReasonPhrase()));
-    // responseList.add(this.createResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-    // HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.BAD_REQUEST,
+     HttpStatus.BAD_REQUEST.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.UNAUTHORIZED,
+     HttpStatus.UNAUTHORIZED.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.FORBIDDEN,
+     HttpStatus.FORBIDDEN.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.NOT_FOUND,
+     HttpStatus.NOT_FOUND.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.CONFLICT,
+     HttpStatus.CONFLICT.getReasonPhrase()));
+     responseList.add(this.createResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+     HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()));
     return responseList;
   }
 

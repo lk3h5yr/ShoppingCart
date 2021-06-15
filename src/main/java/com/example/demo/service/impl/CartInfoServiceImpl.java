@@ -44,28 +44,31 @@ public class CartInfoServiceImpl implements ICartInfoService {
     @Value("${goodsMgr.getGoodsByGoodsId}")
     private String goodsByGoodsIdUrl;
     
-    private RestTemplate restTemplate = new RestTemplate();
-	
-	/**
-	 * 加入購物車
-	 */
-	public void addCartInfo(AddCartReq addCartReq) {
-		CreateCartNumber createCartNumber = new CreateCartNumber();
-
-		CartInfoDto cartInfoDto = new CartInfoDto();
-		cartInfoDto.setCartNumber(createCartNumber.createCode());
-
-		try {
-			cartInfoRepository.save(cartInfoDto);
-		} catch (Exception e) {
-			// 返回errorCode ...未定
-			logger.error(e.getMessage());
-		}
-	}
+	// 刪除指定商品API
+    @Value("${goodsMgr.deleteGoodsIdUrl}")
+    private String deleteGoodsIdUrl;
     
-	/**
-	 * 呼叫http://18.183.144.77:8080/goodses 取得所有商品
-	 */
+    private RestTemplate restTemplate = new RestTemplate();
+    
+    public Map deleteGoods(String goodsId) {
+    	Map deleteMap = new HashMap();
+		ResponseEntity<Object> responseEntity = null;
+		try {
+			String url = MessageFormat.format(deleteGoodsIdUrl, goodsId);
+			responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, Object.class);
+			if (responseEntity.getBody() == null) {
+				deleteMap.put("statusCode", responseEntity.getStatusCode());
+			}
+		} catch (Exception e) {
+			String localizedMessage = e.getLocalizedMessage();
+    		String[] errorArr = localizedMessage.split(":");
+			deleteMap.put("statusCode", errorArr[0].trim());
+			deleteMap.put("errorMsg", errorArr[1]);
+		}
+		
+		return deleteMap;
+    }
+    
 	public List<GoodsInfo> queryAllGoodsInfo() {
 		List<GoodsInfo> queryGoodsInfoList = new ArrayList<GoodsInfo>();
 
@@ -110,35 +113,35 @@ public class CartInfoServiceImpl implements ICartInfoService {
 	
 	public CartInfoDto getCartInfo(String cartNumber) {
 		CartInfoDto cartInfoDto = cartInfoRepository.getCartInfoDtoBycartNumber(cartNumber);
-//    	return cartInfoDtoList;
-		return null;
+		return cartInfoDto;
 	}
 	
 	public List<CartProductInfoDto> getCartProductInfo(String cartNumber) {
-		return null;
+		List<CartProductInfoDto> cartInfoDtoList = cartProductRepository.getCartProductByCartNumber(cartNumber);
+		return cartInfoDtoList;
 	}
 	
-	public void saveCartInfoDto(String cartNumber, String customer, Integer amount, String createdBy, String lastModifiedBy) {
+	public void saveCartInfoDto(String cartNumber, String customer, Integer amount, String createdBy, String lastModifiedBy, Date date) {
 		CartInfoDto cartInfo = new CartInfoDto();
 		cartInfo.setCartNumber(cartNumber);
 		cartInfo.setCustomer(customer);
 		cartInfo.setAmount(amount);
 		cartInfo.setCreatedBy(createdBy);
-		cartInfo.setCreatedDate(new Date());
+		cartInfo.setCreatedDate(date);
 		cartInfo.setLastModifiedBy(lastModifiedBy);
-		cartInfo.setLastModifiedDate(new Date());
+		cartInfo.setLastModifiedDate(date);
 		cartInfoRepository.save(cartInfo);
 	}
 
-	public void saveCartProductInfoDto(String cartNumber, String productId, String productName, Integer amount, String createdBy, String lastModifiedBy) {
+	public void saveCartProductInfoDto(String cartNumber, String productId, String productName, Integer amount, String createdBy, String lastModifiedBy, Date date) {
 		CartProductInfoDto cartProductInfo = new CartProductInfoDto();
 		cartProductInfo.setCartNumber(cartNumber);
 		cartProductInfo.setProductId(productId);
 		cartProductInfo.setProductName(productName);
 		cartProductInfo.setAmount(amount);
-		cartProductInfo.setCreatedDate(new Date());
+		cartProductInfo.setCreatedDate(date);
 		cartProductInfo.setCreatedBy(createdBy);
-		cartProductInfo.setLastModifiedDate(new Date());
+		cartProductInfo.setLastModifiedDate(date);
 		cartProductInfo.setLastModifiedBy(lastModifiedBy);
 		cartProductRepository.save(cartProductInfo);
 	}

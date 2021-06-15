@@ -3,8 +3,8 @@ package com.example.demo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "加入購物車")
-public class AddCartReq {
+@ApiModel(description = "查詢商品數量")
+public class QueryCartNoReq {
 
 	@ApiModelProperty(value = "購物車編號", required = true, position = 1)
 	String cartNumber;
@@ -14,7 +14,7 @@ public class AddCartReq {
 
 	@ApiModelProperty(value = "商品編號", required = true, position = 3)
 	String productId;
-
+	
 	public String getCartNumber() {
 		return cartNumber;
 	}
