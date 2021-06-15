@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: initialize-project
+  profiles:
+    active:
+    - dev
