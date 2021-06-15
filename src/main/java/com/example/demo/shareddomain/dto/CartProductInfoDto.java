@@ -1,10 +1,12 @@
 package com.example.demo.shareddomain.dto;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,6 +21,7 @@ public class CartProductInfoDto implements Serializable{
 	
 	// 流水編號
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private String id;
 	
@@ -28,7 +31,7 @@ public class CartProductInfoDto implements Serializable{
 	
 	// 商品編號
 	@Column(name="product_id")
-	private Integer productId;
+	private String productId;
 	
 	// 商品名稱
 	@Column(name="product_name")
@@ -36,7 +39,7 @@ public class CartProductInfoDto implements Serializable{
 	
 	// 單價金額
 	@Column(name="amount")
-	private LocalDateTime amount;
+	private Integer amount;
 	
 	// 創建者
 	@Column(name="created_by")
@@ -44,15 +47,15 @@ public class CartProductInfoDto implements Serializable{
 	
 	// 創建日期
 	@Column(name="created_date")
-	private LocalDateTime created_date;
+	private Date createdDate;
 
 	// 最後修改者
 	@Column(name="last_modified_by")
-	private LocalDateTime lastModifiedBy;
+	private String lastModifiedBy;
 	
 	// 最後修改日期
 	@Column(name="last_modified_date")
-	private LocalDateTime lastModifiedDate;
+	private Date lastModifiedDate;
 	
 	public String getId() {
 		return id;
@@ -70,11 +73,11 @@ public class CartProductInfoDto implements Serializable{
 		this.cartNumber = cartNumber;
 	}
 
-	public Integer getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Integer productId) {
+	public void setProductId(String productId) {
 		this.productId = productId;
 	}
 
@@ -86,11 +89,11 @@ public class CartProductInfoDto implements Serializable{
 		this.productName = productName;
 	}
 
-	public LocalDateTime getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(LocalDateTime amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
@@ -102,27 +105,27 @@ public class CartProductInfoDto implements Serializable{
 		this.createdBy = createdBy;
 	}
 
-	public LocalDateTime getCreated_date() {
-		return created_date;
+	public Date getCreated_date() {
+		return createdDate;
 	}
 
-	public void setCreated_date(LocalDateTime created_date) {
-		this.created_date = created_date;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getLastModifiedBy() {
+	public String getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(LocalDateTime lastModifiedBy) {
+	public void setLastModifiedBy(String lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	public LocalDateTime getLastModifiedDate() {
+	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
-	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	

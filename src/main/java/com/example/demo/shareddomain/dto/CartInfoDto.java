@@ -2,6 +2,7 @@ package com.example.demo.shareddomain.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,13 +32,13 @@ public class CartInfoDto implements Serializable{
 	private String createdBy;
 	
 	@Column(name="created_date")
-	private LocalDateTime createdDate;
+	private Date createdDate;
 	
 	@Column(name="last_modified_by")
 	private String lastModifiedBy;
 	
 	@Column(name="last_modified_date")
-	private LocalDateTime lastModifiedDate;
+	private Date lastModifiedDate;
 
 	public String getCartNumber() {
 		return cartNumber;
@@ -71,11 +72,11 @@ public class CartInfoDto implements Serializable{
 		this.createdBy = createdBy;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
@@ -87,11 +88,11 @@ public class CartInfoDto implements Serializable{
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	public LocalDateTime getLastModifiedDate() {
+	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
-	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	

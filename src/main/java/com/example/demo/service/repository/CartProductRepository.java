@@ -4,11 +4,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.shareddomain.dto.CartInfoDto;
+import com.example.demo.shareddomain.dto.CartProductInfoDto;
 
 @Repository
-public interface CartInfoRepository extends CrudRepository<CartInfoDto, String>, JpaSpecificationExecutor<CartInfoDto> {
+public interface CartProductRepository extends CrudRepository<CartProductInfoDto, String>, JpaSpecificationExecutor<CartProductInfoDto> {
 
-	CartInfoDto getCartInfoDtoBycartNumber(String cartNumber);
-	
 }
