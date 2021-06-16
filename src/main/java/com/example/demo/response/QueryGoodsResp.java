@@ -7,10 +7,10 @@ import com.example.demo.entity.GoodsInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "¬d¸ß©Ò¦³°Ó«~")
+@ApiModel(description = "æŸ¥è©¢æ‰€æœ‰å•†å“")
 public class QueryGoodsResp extends apiResp {
 	
-    @ApiModelProperty(value = "µ²ªG", example = "true", position = 3)
+    @ApiModelProperty(value = "çµæœ", example = "true", position = 3)
     private List<GoodsInfo> data;
 
     public static QueryGoodsResp success(List<GoodsInfo> data) {

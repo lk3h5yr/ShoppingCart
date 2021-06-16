@@ -2,19 +2,18 @@ package com.example.demo.response;
 
 import java.util.List;
 
-import com.example.demo.entity.GoodsInfo;
 import com.example.demo.shareddomain.dto.CartProductInfoDto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "¨ú±oÁÊª«²M³æ")
+@ApiModel(description = "å–å¾—è³¼ç‰©æ¸…å–®")
 public class QueryCartResp extends apiResp {
 	
-    @ApiModelProperty(value = "µ²ªG", example = "true", position = 4)
+    @ApiModelProperty(value = "çµæœ", example = "true", position = 4)
     private List<CartProductInfoDto> data;
     
-    @ApiModelProperty(value = "Á`ª÷ÃB", example = "true", position = 3)
+    @ApiModelProperty(value = "ç¸½é‡‘é¡", example = "true", position = 3)
     private Integer allAmount;
 
 	public static QueryCartResp success(List<CartProductInfoDto> data, Integer allAmount) {

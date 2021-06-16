@@ -7,10 +7,10 @@ import com.example.demo.shareddomain.dto.CartProductInfoDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "­×§ï«ü©w°Ó«~¼Æ¶q")
+@ApiModel(description = "ä¿®æ”¹æŒ‡å®šå•†å“æ•¸é‡")
 public class ModifyGoodsResp extends apiResp {
 
-	@ApiModelProperty(value = "µ²ªG", example = "true", position = 1)
+	@ApiModelProperty(value = "çµæœ", example = "true", position = 1)
 	private List<CartProductInfoDto> data;
 	  
 	public static ModifyGoodsResp success(List<CartProductInfoDto> data) {

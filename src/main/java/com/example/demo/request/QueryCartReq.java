@@ -3,13 +3,13 @@ package com.example.demo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "¬d¸ßÁÊª«¨®²M³æ")
+@ApiModel(description = "æŸ¥è©¢è³¼ç‰©è»Šæ¸…å–®")
 public class QueryCartReq {
 
-	@ApiModelProperty(value = "ÁÊª«¨®½s¸¹", required = true, position = 1)
+	@ApiModelProperty(value = "è³¼ç‰©è»Šç·¨è™Ÿ", required = true, position = 1)
 	String cartNumber;
 
-	@ApiModelProperty(value = "«È¤á¦WºÙ", required = true, position = 2)
+	@ApiModelProperty(value = "å®¢æˆ¶åç¨±", required = true, position = 2)
 	String customer;
 	
 	public String getCartNumber() {

@@ -5,10 +5,10 @@ import com.example.demo.entity.GoodsInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "·s¼W°Ó«~")
+@ApiModel(description = "æ–°å¢å•†å“")
 public class AddCartResp extends apiResp {
 	
-    @ApiModelProperty(value = "µ²ªG", example = "true", position = 3)
+    @ApiModelProperty(value = "çµæœ", example = "true", position = 3)
     private GoodsInfo data;
 
     public static AddCartResp success(GoodsInfo data) {

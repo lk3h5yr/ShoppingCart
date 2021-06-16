@@ -15,14 +15,14 @@ import com.example.demo.shareddomain.dto.CartProductInfoDto;
 public interface ICartInfoService {
 	
 	/**
-	 * ©I¥s http://18.183.144.77:8080/goodses ¨ú±o©Ò¦³°Ó«~
+	 * å‘¼å« http://18.183.144.77:8080/goodses å–å¾—æ‰€æœ‰å•†å“
 	 * 
 	 * @return
 	 */
 	List<GoodsInfo> queryAllGoodsInfo();
 	
 	/**
-	 * ©I¥s http://18.183.144.77:8080/goods/{goodsId} ¨ú±o°Ó«~
+	 * å‘¼å« http://18.183.144.77:8080/goods/{goodsId} å–å¾—å•†å“
 	 * 
 	 * @param goodsId
 	 * @return
@@ -30,63 +30,63 @@ public interface ICartInfoService {
 	Map getGoodsBygoodsId(String goodsId);
 	
 	/**
-	 * ©I¥s http://18.183.144.77:8080/goods/1297/{0}/inventory §ó·s°Ó«~®w¦s
+	 * å‘¼å« http://18.183.144.77:8080/goods/1297/{0}/inventory æ›´æ–°å•†å“åº«å­˜
 	 * @param inventory
 	 * @param goodsId
 	 */
 	void cheangInventory(Map<String, String> inventory, String goodsId);
 	
 	/**
-	 * ¨ú±oÁÊª«¸ê°T
+	 * å–å¾—è³¼ç‰©è³‡è¨Š
 	 * 
-	 * @param cartNumber ÁÊª«¨®½s¸¹
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
 	 * @return List<CartInfoDto>
 	 */
 	CartInfoDto getCartInfo(String cartNumber);
 	
 	/**
-	 * ¨ú±o°Ó«~¸ê°T
+	 * å–å¾—å•†å“è³‡è¨Š
 	 * 
-	 * @param cartNumber ÁÊª«¨®½s¸¹
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
 	 * @return
 	 */
 	List<CartProductInfoDto> getCartProductInfo(String cartNumber);
 	
 	/**
-	 * §R°£°Ó«~
+	 * åˆªé™¤å•†å“
 	 * 
-	 * @param goodsId °Ó«~½s¸¹
+	 * @param goodsId å•†å“ç·¨è™Ÿ
 	 */
 	Map deleteGoods(String goodsId);
 	
 	/**
-	 * «Ø¥ß­q³æ
+	 * å»ºç«‹è¨‚å–®
 	 * @param queryGoodsReq
 	 * @return
 	 */
 	Map orderSend(Map orderMap);
 	
 	/**
-	 * Àx¦s¸ê®Æ¶iÁÊª«¨®
+	 * å„²å­˜è³‡æ–™é€²è³¼ç‰©è»Š
 	 * 
-	 * @param cartNumber ÁÊª«¨®½s¸¹
-	 * @param customer ÁÊ¶R¤H
-	 * @param amount ª÷ÃB
-	 * @param createdBy ÁÊ¶R¤H
-	 * @param lastModifiedBy ÁÊ¶R¤H
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
+	 * @param customer è³¼è²·äºº
+	 * @param amount é‡‘é¡
+	 * @param createdBy è³¼è²·äºº
+	 * @param lastModifiedBy è³¼è²·äºº
 	 * @param date 
 	 */
 	void saveCartInfoDto(String cartNumber, String customer, Integer amount, String createdBy, String lastModifiedBy, Date date);
 	
 	/**
-	 * Àx¦s¸ê®Æ¶i°Ó«~²M³æ
+	 * å„²å­˜è³‡æ–™é€²å•†å“æ¸…å–®
 	 * 
-	 * @param cartNumber ÁÊª«¨®½s¸¹
-	 * @param productId °Ó«~½s¸¹
-	 * @param productName °Ó«~¦WºÙ
-	 * @param amount ª÷ÃB
-	 * @param createdBy ÁÊ¶R¤H
-	 * @param lastModifiedBy ÁÊ¶R¤H
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
+	 * @param productId å•†å“ç·¨è™Ÿ
+	 * @param productName å•†å“åç¨±
+	 * @param amount é‡‘é¡
+	 * @param createdBy è³¼è²·äºº
+	 * @param lastModifiedBy è³¼è²·äºº
 	 * @param date
 	 */
 	void saveCartProductInfoDto(String cartNumber, String productId, String productName, Integer amount, String createdBy, String lastModifiedBy, Date date);

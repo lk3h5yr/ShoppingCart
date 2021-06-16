@@ -2,7 +2,7 @@ package com.example.demo.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(description = "¨ú±o©Ò¦³°Ó«~")
+@ApiModel(description = "å–å¾—æ‰€æœ‰å•†å“")
 public class QueryGoodsReq {
     // Nan
 }

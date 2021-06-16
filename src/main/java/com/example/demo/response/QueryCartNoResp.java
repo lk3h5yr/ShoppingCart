@@ -7,16 +7,16 @@ import com.example.demo.shareddomain.dto.CartProductInfoDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "¨ú±o°Ó«~¸Ô²Ó¼Æ¶q")
+@ApiModel(description = "å–å¾—å•†å“è©³ç´°æ•¸é‡")
 public class QueryCartNoResp extends apiResp {
 	
-    @ApiModelProperty(value = "µ²ªG", example = "true", position = 5)
+    @ApiModelProperty(value = "çµæœ", example = "true", position = 5)
     private List<CartProductInfoDto> data;
     
-    @ApiModelProperty(value = "¼Æ¶q", example = "true", position = 4)
+    @ApiModelProperty(value = "æ•¸é‡", example = "true", position = 4)
     private Integer cartNo;
     
-    @ApiModelProperty(value = "Á`ª÷ÃB", example = "true", position = 3)
+    @ApiModelProperty(value = "ç¸½é‡‘é¡", example = "true", position = 3)
     private Integer allAmount;
 
 	public static QueryCartNoResp success(List<CartProductInfoDto> data, Integer cartNo, Integer allAmount) {

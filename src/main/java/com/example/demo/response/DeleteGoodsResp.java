@@ -7,10 +7,10 @@ import com.example.demo.shareddomain.dto.CartProductInfoDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "§R°£«ü©w°Ó«~")
+@ApiModel(description = "åˆªé™¤æŒ‡å®šå•†å“")
 public class DeleteGoodsResp extends apiResp {
 	
-	@ApiModelProperty(value = "µ²ªG", example = "true", position = 1)
+	@ApiModelProperty(value = "çµæœ", example = "true", position = 1)
 	private List<CartProductInfoDto> data;
 
 	public static DeleteGoodsResp success(List<CartProductInfoDto> data) {

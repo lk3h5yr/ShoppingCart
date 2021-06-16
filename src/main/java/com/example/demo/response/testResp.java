@@ -3,10 +3,10 @@ package com.example.demo.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "´ú¸Õ¦^ÂĞ")
+@ApiModel(description = "æ¸¬è©¦å›è¦†")
 public class testResp extends apiResp {
 	
-    @ApiModelProperty(value = "µ²ªG", example = "true", position = 3)
+    @ApiModelProperty(value = "çµæœ", example = "true", position = 3)
     private Boolean data;
 
     public static testResp success(Boolean data) {

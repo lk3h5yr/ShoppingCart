@@ -14,16 +14,16 @@ public interface CartProductRepository extends CrudRepository<CartProductInfoDto
 	List<CartProductInfoDto> getCartProductByCartNumber(String cartNumber);
 	
 	/**
-	 * ¬d¸ßÁÊª«¨®²M³æ
-	 * @param cartNumber ÁÊª«¨®½s¸¹
+	 * æŸ¥è©¢è³¼ç‰©è»Šæ¸…å–®
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
 	 * @param createdBy
 	 * @return
 	 */
 	List<CartProductInfoDto> findByCartNumberAndCreatedBy(String cartNumber, String createdBy);
 	
 	/**
-	 * ¬d¸ß°Ó«~¼Æ¶q
-	 * @param cartNumber ÁÊª«¨®½s¸¹
+	 * æŸ¥è©¢å•†å“æ•¸é‡
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
 	 * @param createdBy
 	 * @param productId
 	 * @return
@@ -31,16 +31,16 @@ public interface CartProductRepository extends CrudRepository<CartProductInfoDto
 	List<CartProductInfoDto> findByCartNumberAndCreatedByAndProductId(String cartNumber, String createdBy, String productId);
 	
 	/**
-	 * ¬d¸ß¦UÃş°Ó«~¼Æ¶q
-	 * @param productId °Ó«~¥N¸¹
+	 * æŸ¥è©¢å„é¡å•†å“æ•¸é‡
+	 * @param productId å•†å“ä»£è™Ÿ
 	 * @return
 	 */
 	int countByProductId(String productId);
 	
 	/**
-	 * §R°£¸ê®Æ®w¸ê®Æ
-	 * @param cartNumber ÁÊª«¨®½s¸¹
-	 * @param createdBy ÁÊ¶R¤H
+	 * åˆªé™¤è³‡æ–™åº«è³‡æ–™
+	 * @param cartNumber è³¼ç‰©è»Šç·¨è™Ÿ
+	 * @param createdBy è³¼è²·äºº
 	 */
 	void deleteByCartNumberAndCreatedBy(String cartNumber, String createdBy);
 	

@@ -15,45 +15,45 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "cart_product")
-public class CartProductInfoDto implements Serializable{
+public class CartProductInfoDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	// ¬y¤ô½s¸¹
+	// æµæ°´ç·¨è™Ÿ
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private String id;
 	
-	// ÁÊª«¨®½s¸¹
+	// è³¼ç‰©è»Šç·¨è™Ÿ
 	@Column(name="cart_number")
 	private String cartNumber;
 	
-	// °Ó«~½s¸¹
+	// å•†å“ç·¨è™Ÿ
 	@Column(name="product_id")
 	private String productId;
 	
-	// °Ó«~¦WºÙ
+	// å•†å“åç¨±
 	@Column(name="product_name")
 	private String productName;
 	
-	// ³æ»ùª÷ÃB
+	// å–®åƒ¹é‡‘é¡
 	@Column(name="amount")
 	private Integer amount;
 	
-	// ³Ğ«ØªÌ
+	// å‰µå»ºè€…
 	@Column(name="created_by")
 	private String createdBy;
 	
-	// ³Ğ«Ø¤é´Á
+	// å‰µå»ºæ—¥æœŸ
 	@Column(name="created_date")
 	private Date createdDate;
 
-	// ³Ì«á­×§ïªÌ
+	// æœ€å¾Œä¿®æ”¹è€…
 	@Column(name="last_modified_by")
 	private String lastModifiedBy;
 	
-	// ³Ì«á­×§ï¤é´Á
+	// æœ€å¾Œä¿®æ”¹æ—¥æœŸ
 	@Column(name="last_modified_date")
 	private Date lastModifiedDate;
 	

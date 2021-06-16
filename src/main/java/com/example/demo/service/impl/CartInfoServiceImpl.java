@@ -46,23 +46,23 @@ public class CartInfoServiceImpl implements ICartInfoService {
 	@Autowired
 	private CartProductRepository cartProductRepository;
 	
-	// ¨ϊ±o©Ò¦³°Σ«~
+	// ε–εΎ—ζ‰€ζ‰ε•†ε“
     @Value("${goodsMgr.getAllGoodsesUrl}")
     private String allGoodsesUrl;
     
-	// ¨ϊ±o«ό©w°Σ«~API
+	// ε–εΎ—ζ‡ε®ε•†ε“API
     @Value("${goodsMgr.getGoodsByGoodsId}")
     private String goodsByGoodsIdUrl;
     
-	// §R°£«ό©w°Σ«~API
+	// εªι™¤ζ‡ε®ε•†ε“API
     @Value("${goodsMgr.deleteGoodsIdUrl}")
     private String deleteGoodsIdUrl;
     
-    // Εά§σ«ό©w°Σ«~®w¦sAPI
+    // θ®ζ›΄ζ‡ε®ε•†ε“εΊ«ε­API
     @Value("${goodsMgr.cheangInventoryUrl}")
     private String cheangInventoryUrl;
     
-    // «Ψ¥ί­q³ζAPI
+    // ε»Ίη«‹θ¨‚ε–®API
     @Value("${goodsMgr.ordersUrl}")
     private String ordersUrl;
     
@@ -117,6 +117,7 @@ public class CartInfoServiceImpl implements ICartInfoService {
 			responseEntity = restTemplate.exchange(allGoodsesUrl, HttpMethod.GET, null, Object.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			throw new CartsProcessException("ε¤–ιƒ¨APIη³»ηµ±ι―θª¤! URL: " + allGoodsesUrl, ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
 
 		Map bodyMap = (Map) responseEntity.getBody();
@@ -159,18 +160,6 @@ public class CartInfoServiceImpl implements ICartInfoService {
 		}
 	}
 	
-	public static String getJSONString(Map<String, String> params) {
-		JSONObject json = new JSONObject();
-		for (String key : params.keySet()) {
-			try {
-				json.put(key, params.get(key));
-			} catch (Exception ex) {
-				throw ex;
-			}
-		}
-		return json.toString();
-	}
-	
     @Override
 	public Map getGoodsBygoodsId(String goodsId) {
 		ResponseEntity<Map> responseEntity = null;
@@ -179,6 +168,7 @@ public class CartInfoServiceImpl implements ICartInfoService {
 			responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, Map.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			throw new CartsProcessException("ε¤–ιƒ¨APIη³»ηµ±ι―θª¤! URL: " + goodsByGoodsIdUrl, ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
 
 		return (Map) responseEntity.getBody();
@@ -196,7 +186,6 @@ public class CartInfoServiceImpl implements ICartInfoService {
 		return cartInfoDtoList;
 	}
 	
-    @Override
 	public void saveCartInfoDto(String cartNumber, String customer, Integer amount, String createdBy, String lastModifiedBy, Date date) {
 		CartInfoDto cartInfo = new CartInfoDto();
 		cartInfo.setCartNumber(cartNumber);
@@ -209,7 +198,6 @@ public class CartInfoServiceImpl implements ICartInfoService {
 		cartInfoRepository.save(cartInfo);
 	}
 
-    @Override
 	public void saveCartProductInfoDto(String cartNumber, String productId, String productName, Integer amount, String createdBy, String lastModifiedBy, Date date) {
 		CartProductInfoDto cartProductInfo = new CartProductInfoDto();
 		cartProductInfo.setCartNumber(cartNumber);

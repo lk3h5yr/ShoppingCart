@@ -8,19 +8,19 @@ import com.example.demo.entity.OrderInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "«Ø¥ß­q³æ")
+@ApiModel(description = "å»ºç«‹è¨‚å–®")
 public class OrderResp extends apiResp {
 	
-	@ApiModelProperty(value = "­q³æ¦^¶Ç½s¸¹", example = "true", position = 1)
+	@ApiModelProperty(value = "è¨‚å–®å›å‚³ç·¨è™Ÿ", example = "true", position = 1)
 	private String orderId;
 	
-	@ApiModelProperty(value = "­qÁÊ¤H", example = "true", position = 2)
+	@ApiModelProperty(value = "è¨‚è³¼äºº", example = "true", position = 2)
 	private String customerName;
 	
-	@ApiModelProperty(value = "­qÁÊª÷ÃB", example = "true", position = 3)
+	@ApiModelProperty(value = "è¨‚è³¼é‡‘é¡", example = "true", position = 3)
 	private Integer totalAmount;
 	
-	@ApiModelProperty(value = "µ²ªG", example = "true", position = 4)
+	@ApiModelProperty(value = "çµæœ", example = "true", position = 4)
 	private List<OrderInfo> data;
 	
 	public static OrderResp success(Map data) {

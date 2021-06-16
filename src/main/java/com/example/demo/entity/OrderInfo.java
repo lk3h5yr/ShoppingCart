@@ -2,16 +2,16 @@ package com.example.demo.entity;
 
 public class OrderInfo {
 	
-	// °Ó«~½s¸¹
+	// å•†å“ç·¨è™Ÿ
 	private String goodsId;
 	
-	// °Ó«~¦WºÙ
+	// å•†å“åç¨±
 	private String goodsName;
 	
-	// °Ó«~³æ»ù
+	// å•†å“å–®åƒ¹
 	private Integer unitPrice;
 	
-	// °Ó«~¼Æ¶q
+	// å•†å“æ•¸é‡
 	private Integer count;
 	
 	public String getGoodsId() {

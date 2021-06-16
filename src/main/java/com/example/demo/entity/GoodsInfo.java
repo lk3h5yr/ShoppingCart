@@ -2,28 +2,28 @@ package com.example.demo.entity;
 
 public class GoodsInfo {
 	
-	// °Ó«~½s¸¹
+	// å•†å“ç·¨è™Ÿ
 	private String goodsId;
 	
-	// °Ó«~¦WºÙ
+	// å•†å“åç¨±
 	private String goodsName;
 	
-	// °Ó«~³æ»ù
+	// å•†å“å–®åƒ¹
 	private Integer unitPrice;
 	
-	// °Ó«~¼Æ¶q
+	// å•†å“æ•¸é‡
 	private Integer inventory;
 	
-	// ³Ğ«ØªÌ
+	// å‰µå»ºè€…
 	private String createdBy;
 	
-	// ³Ğ«Ø¤é´Á
+	// å‰µå»ºæ—¥æœŸ
 	private String createdDate;
 	
-	// ³Ì«á­×§ïªÌ
+	// æœ€å¾Œä¿®æ”¹è€…
 	private String lastModifiedBy;
 	
-	// ³Ì«á­×§ï¤é´Á
+	// æœ€å¾Œä¿®æ”¹æ—¥æœŸ
 	private String lastModifiedDate;
 	
 	public String getGoodsId() {

@@ -54,7 +54,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/")
-@Api(tags = {"ÁÊª«¨®ªA°È¤¶­±API"})
+@Api(tags = {"è³¼ç‰©è»Šæœå‹™ä»‹é¢API"})
 @ApiResponses({@ApiResponse(code = 200, message = "Successfully."),
 	@ApiResponse(code = 400, message = "Bad Request."),
 	@ApiResponse(code = 404, message = "Not found Error."),
@@ -75,15 +75,15 @@ public class CartsProcessController {
 	
 	/*@ResponseBody
 	@PostMapping(value = "/getTest")
-    @ApiOperation(value = "´ú¸Õ±M®×", notes = "´ú¸Õ±M®×")
-	public testResponse testCartInfoDto(@ApiParam(required = true, value = "´ú¸Õ±M®×") @RequestBody testReq testReq) {
+    @ApiOperation(value = "æ¸¬è©¦å°ˆæ¡ˆ", notes = "æ¸¬è©¦å°ˆæ¡ˆ")
+	public testResponse testCartInfoDto(@ApiParam(required = true, value = "æ¸¬è©¦å°ˆæ¡ˆ") @RequestBody testReq testReq) {
 		return testResponse.success(null);
 	}*/
 	
 	@ResponseBody
 	@GetMapping(value = "/queryGoods")
-    @ApiOperation(value = "¨ú±o¥~³¡©Ò¦³°Ó«~", notes = "¨ú±o¥~³¡©Ò¦³°Ó«~")
-	public QueryGoodsResp queryGoods(@ApiParam(required = true, value = "¨ú±o¥~³¡©Ò¦³°Ó«~") @RequestBody QueryGoodsReq queryGoodsReq) {
+    @ApiOperation(value = "å–å¾—å¤–éƒ¨æ‰€æœ‰å•†å“", notes = "å–å¾—å¤–éƒ¨æ‰€æœ‰å•†å“")
+	public QueryGoodsResp queryGoods(@ApiParam(required = true, value = "å–å¾—å¤–éƒ¨æ‰€æœ‰å•†å“") @RequestBody QueryGoodsReq queryGoodsReq) {
 		List<GoodsInfo> queryGoodsInfoList = cartInfoService.queryAllGoodsInfo();
 		return QueryGoodsResp.success(queryGoodsInfoList);
 	}
@@ -91,14 +91,18 @@ public class CartsProcessController {
 	@ResponseBody
 	@Transactional
 	@PostMapping(value = "/orderSend")
-    @ApiOperation(value = "«Ø¥ß­q³æ", notes = "«Ø¥ß­q³æ")
-	public OrderResp orderSend(@ApiParam(required = true, value = "«Ø¥ß­q³æ") @RequestBody OrderReq orderReq) {
-		// ©ó­q³æ«Ø¥ß«e³z¹L /goods/{goodsId}/inventory ÅÜ§ó®w¦s
+    @ApiOperation(value = "å»ºç«‹è¨‚å–®", notes = "å»ºç«‹è¨‚å–®")
+	public OrderResp orderSend(@ApiParam(required = true, value = "å»ºç«‹è¨‚å–®") @RequestBody OrderReq orderReq) {
 		List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(orderReq.getCartNumber(), 
 				orderReq.getCustomer());
+		
+		if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
+			throw new CartsProcessException("è³¼ç‰©è»Šæ²’æœ‰å•†å“!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+		}
+		
 		List<String> productIdList = new ArrayList<String>();
 		Map orderResp = new HashMap();
-		// ¨ú©Ò¦³ÁÊª«¨®ªººØÃş°Ó«~¥N¸¹
+		// å–æ‰€æœ‰è³¼ç‰©è»Šçš„ç¨®é¡å•†å“ä»£è™Ÿ
 		queryGoodsInfoList.forEach( tempGppdsInfo -> {
 			String productId = tempGppdsInfo.getProductId();
 			if (!productIdList.contains(productId)) {
@@ -106,47 +110,47 @@ public class CartsProcessController {
 			}
 		});
 		
-		// Map<°Ó«~¥N¸¹, Á`¼Æ¶q>
+		// Map<å•†å“ä»£è™Ÿ, ç¸½æ•¸é‡>
 		Map<String, Integer> productIdMap = new HashMap();
-		// ©I¥s¥~³¡API ¬d¸Ó°Ó«~²{¦b¦³¦h¤Ö¼Æ¶q
+		// å‘¼å«å¤–éƒ¨API æŸ¥è©²å•†å“ç¾åœ¨æœ‰å¤šå°‘æ•¸é‡
 		Map<String, Integer> goodsMap = new HashMap();
 		
 		try {
-			// ¡½ §ó·s®w¦s
+			// â–  æ›´æ–°åº«å­˜
 			if (!CollectionUtils.isEmpty(productIdList)) {
 				productIdList.forEach( tempProductId -> {
-					// ¬d¸ß¸ê®Æ®w¤º¦U°Ó«~¦U¦³´Xµ§
+					// æŸ¥è©¢è³‡æ–™åº«å…§å„å•†å“å„æœ‰å¹¾ç­†
 					int cartProductCount = cartProductRepository.countByProductId(tempProductId);
 					
-					// ¬d¸ß§ó§ï®w¦s«e ¨t²Î¦³¦h¤Ö®w¦s
+					// æŸ¥è©¢æ›´æ”¹åº«å­˜å‰ ç³»çµ±æœ‰å¤šå°‘åº«å­˜
 					Map tempGoodsMap = cartInfoService.getGoodsBygoodsId(tempProductId);
 					int inventory = Integer.valueOf(tempGoodsMap.get("inventory").toString());
 					
 					if (cartProductCount > inventory) {
-						throw new CartsProcessException("°Ó«~®w¦s¤£¨¬!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+						throw new CartsProcessException("å•†å“åº«å­˜ä¸è¶³!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 					}
-					// ¥~³¡®w¦sµ§¼Æ
+					// å¤–éƒ¨åº«å­˜ç­†æ•¸
 					goodsMap.put(tempProductId, inventory);
-					// ¸ê®Æ®w¤º¦U°Ó«~µ§¼Æ
+					// è³‡æ–™åº«å…§å„å•†å“ç­†æ•¸
 					productIdMap.put(tempProductId, cartProductCount);
-					// ¥~³¡®w¦s ¦© ¦¹¨t²Î¸ê®Æ®w¼Æ¶q = §ó·s«áªº¸ê®Æµ§¼Æ
+					// å¤–éƒ¨åº«å­˜ æ‰£ æ­¤ç³»çµ±è³‡æ–™åº«æ•¸é‡ = æ›´æ–°å¾Œçš„è³‡æ–™ç­†æ•¸
 					int finallyInventory = inventory - cartProductCount;
-					// §ó·s®w¦s
+					// æ›´æ–°åº«å­˜
 					this.cheangInventory(finallyInventory, tempProductId);
 				});
 			}
-			// ¡½ °e¥X­q³æ
+			// â–  é€å‡ºè¨‚å–®
 			Map orderMap = new HashMap();
-			// Á`ª÷ÃB
+			// ç¸½é‡‘é¡
 			Integer allAmount = 0;
 			if (!CollectionUtils.isEmpty(productIdList)) {
 				List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
-				// ²Õ°e­q³æ¸ê®Æ
+				// çµ„é€è¨‚å–®è³‡æ–™
 				for (int i = 0; i < productIdList.size(); i++) {
 					List<CartProductInfoDto> cartProductInfoDtoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(orderReq.getCartNumber(), 
 							orderReq.getCustomer(), productIdList.get(i));
 					int count = cartProductInfoDtoList.size();
-					int amount = cartProductInfoDtoList.get(i).getAmount();
+					int amount = cartProductInfoDtoList.get(0).getAmount();
 					OrderInfo orderInfo = new OrderInfo();
 					orderInfo.setCount(count);
 					orderInfo.setGoodsId(productIdList.get(i));
@@ -172,13 +176,13 @@ public class CartsProcessController {
 				orderResp = cartInfoService.orderSend(orderMap);
 			}
 		} catch (Exception e) {
-			// ¦^´_§ó°Ê¨ìªº®w¦s¼Æ¶q
+			// å›å¾©æ›´å‹•åˆ°çš„åº«å­˜æ•¸é‡
 			for (String key : goodsMap.keySet()) {
 				this.cheangInventory(goodsMap.get(key), key);
 			}
 			throw new CartsProcessException(e.getMessage(), ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
-		// ­q³æ°e¥X¦¨¥\«á, §R°£table¸ê®Æ
+		// è¨‚å–®é€å‡ºæˆåŠŸå¾Œ, åˆªé™¤tableè³‡æ–™
 		cartProductRepository.deleteByCartNumberAndCreatedBy(orderReq.getCartNumber(), orderReq.getCustomer());
 		cartInfoRepository.deleteBycartNumber(orderReq.getCartNumber());
 		
@@ -188,46 +192,51 @@ public class CartsProcessController {
 	@ResponseBody
 	@Transactional
 	@DeleteMapping(value = "/deleteGoods")
-    @ApiOperation(value = "§R°£°Ó«~", notes = "§R°£°Ó«~")
-	public DeleteGoodsResp deleteGoods(@ApiParam(required = true, value = "§R°£°Ó«~") @RequestBody DeleteGoodsReq deleteGoodsReq) {
+    @ApiOperation(value = "åˆªé™¤å•†å“", notes = "åˆªé™¤å•†å“")
+	public DeleteGoodsResp deleteGoods(@ApiParam(required = true, value = "åˆªé™¤å•†å“") @RequestBody DeleteGoodsReq deleteGoodsReq) {
 		 List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(deleteGoodsReq.getCartNumber(), 
 				deleteGoodsReq.getCustomer(), deleteGoodsReq.getProductId());
 		
-		// ÀË®Ö¿é¤J§R°£¼Æ¶q¬O§_¶W¹L¿ï¾Ü°Ó«~ªºÁÊ¶R¼Æ¶q
+		// æª¢æ ¸è¼¸å…¥åˆªé™¤æ•¸é‡æ˜¯å¦è¶…éé¸æ“‡å•†å“çš„è³¼è²·æ•¸é‡
 		if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
-			throw new CartsProcessException("§R°£¼Æ¶q¶W¹LÁÊ¶R¼Æ¶q!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+			throw new CartsProcessException("åˆªé™¤æ•¸é‡è¶…éè³¼è²·æ•¸é‡!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
-		// ¦pªG§R°£¼Æ¶q»PÁÊ¶R¼Æ¶q¤@­P«h¥ş¼Æ§R°£
+		// å¦‚æœåˆªé™¤æ•¸é‡èˆ‡è³¼è²·æ•¸é‡ä¸€è‡´å‰‡å…¨æ•¸åˆªé™¤
 		CartInfoDto  cartInfoDto  = cartInfoRepository.getCartInfoDtoBycartNumber(deleteGoodsReq.getCartNumber());
 		if (cartInfoDto == null) {
-			throw new CartsProcessException("½Ğ­«·s¬d¸ß«á, ¦A¦¸°õ¦æ§R°£!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+			throw new CartsProcessException("è«‹é‡æ–°æŸ¥è©¢å¾Œ, å†æ¬¡åŸ·è¡Œåˆªé™¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
 		
-		// ­×§ï«áªºª÷ÃB
+		// ä¿®æ”¹å¾Œçš„é‡‘é¡
 		int modifyAmount = 0;
 				
 		List<CartProductInfoDto> cartProductInfoDto = cartProductRepository.findByCartNumberAndCreatedBy(deleteGoodsReq.getCartNumber(),
 				deleteGoodsReq.getCustomer());
 		
-		// §R°£¸Ó°Ó«~²M³æ
+		// åˆªé™¤è©²å•†å“æ¸…å–®
 		cartProductRepository.deleteAll(queryGoodsInfoList);
 		logger.info("cartProductRepository.deleteAll: " + queryGoodsInfoList);
 		
-		// ¦pªG°Ó«~²M³æ¤ºµL°Ó«~, «hÁÊª«¨®²MªÅ
-		if (queryGoodsInfoList.size() == cartProductInfoDto.size()) {
-			cartInfoRepository.delete(cartInfoDto);
-			logger.info("cartInfoRepository.delete: " + cartInfoDto);
-		} 
-		// ­YÁÊª«¨®¤º§R°£¸Ó°Ó«~ÁÙ¦³¨ä¾l°Ó«~, «h§ó·sÁÊª«¨®ª÷ÃB
-		else {
-			for (CartProductInfoDto temp : queryGoodsInfoList) {
-				modifyAmount = modifyAmount + temp.getAmount();
+		try {
+			// å¦‚æœå•†å“æ¸…å–®å…§ç„¡å•†å“, å‰‡è³¼ç‰©è»Šæ¸…ç©º
+			if (queryGoodsInfoList.size() == cartProductInfoDto.size()) {
+				cartInfoRepository.delete(cartInfoDto);
+				logger.info("cartInfoRepository.delete: " + cartInfoDto);
+			} 
+			// è‹¥è³¼ç‰©è»Šå…§åˆªé™¤è©²å•†å“é‚„æœ‰å…¶é¤˜å•†å“, å‰‡æ›´æ–°è³¼ç‰©è»Šé‡‘é¡
+			else {
+				for (CartProductInfoDto temp : queryGoodsInfoList) {
+					modifyAmount = modifyAmount + temp.getAmount();
+				}
+				cartInfoDto.setAmount(modifyAmount);
+				cartInfoDto.setLastModifiedBy(deleteGoodsReq.getCustomer());
+				cartInfoDto.setLastModifiedDate(new Date());
+				cartInfoRepository.save(cartInfoDto);
+				logger.info("cartInfoRepository.save: " + cartInfoDto);
 			}
-			cartInfoDto.setAmount(modifyAmount);
-			cartInfoDto.setLastModifiedBy(deleteGoodsReq.getCustomer());
-			cartInfoDto.setLastModifiedDate(new Date());
-			cartInfoRepository.save(cartInfoDto);
-			logger.info("cartInfoRepository.save: " + cartInfoDto);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new CartsProcessException("è«‹é‡æ–°æŸ¥è©¢å¾Œ, å†æ¬¡åŸ·è¡Œåˆªé™¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
 		
 		return DeleteGoodsResp.success(queryGoodsInfoList);
@@ -236,97 +245,107 @@ public class CartsProcessController {
 	@ResponseBody
 	@Transactional
 	@PostMapping(value = "/modifyGoods")
-    @ApiOperation(value = "­×§ï°Ó«~¼Æ¶q", notes = "­×§ï°Ó«~¼Æ¶q")
-	public ModifyGoodsResp modifyGoods(@ApiParam(required = true, value = "­×§ï°Ó«~¼Æ¶q") @RequestBody ModifyGoodsReq modifyGoodsReq) {
+    @ApiOperation(value = "ä¿®æ”¹å•†å“æ•¸é‡", notes = "ä¿®æ”¹å•†å“æ•¸é‡")
+	public ModifyGoodsResp modifyGoods(@ApiParam(required = true, value = "ä¿®æ”¹å•†å“æ•¸é‡") @RequestBody ModifyGoodsReq modifyGoodsReq) {
 		List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(modifyGoodsReq.getCartNumber(), 
 				modifyGoodsReq.getCustomer(), modifyGoodsReq.getProductId());
 		CartInfoDto cartInfoDto = cartInfoService.getCartInfo(modifyGoodsReq.getCartNumber());
-		
-		// ¨ú±o±ı­×§ïªº°Ó«~¼Æ¶q
+		List<CartProductInfoDto> finallyQueryGoodsInfoList  = new ArrayList<CartProductInfoDto>();
+		// å–å¾—æ¬²ä¿®æ”¹çš„å•†å“æ•¸é‡
 		int productNo = modifyGoodsReq.getProductNo();
-		// ­×§ï«áªºª÷ÃB
+		// ä¿®æ”¹å¾Œçš„é‡‘é¡
 		int modifyAmount = 0;
-		// ÀË®Ö¦³µL¸Ó°Ó«~©ñ¤JÁÊª«¨®¤¤
+		// æª¢æ ¸æœ‰ç„¡è©²å•†å“æ”¾å…¥è³¼ç‰©è»Šä¸­
 		if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
-			throw new CartsProcessException("¿é¤J­×§ï¼Æ¶q¦³»~!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+			throw new CartsProcessException("è¼¸å…¥ä¿®æ”¹æ•¸é‡æœ‰èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		}
-		// ¦pªG­×§ï¼Æ¶q»PÁÊ¶R¼Æ¶q¤@­P«hªğ¦^¿ù»~°T®§
+		// å¦‚æœä¿®æ”¹æ•¸é‡èˆ‡è³¼è²·æ•¸é‡ä¸€è‡´å‰‡è¿”å›éŒ¯èª¤è¨Šæ¯
 		if (queryGoodsInfoList.size() == productNo) {
-			throw new CartsProcessException("¿é¤J­×§ï¼Æ¶q»PÁÊ¶R¼Æ¶q¤@­P!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+			throw new CartsProcessException("è¼¸å…¥ä¿®æ”¹æ•¸é‡èˆ‡è³¼è²·æ•¸é‡ä¸€è‡´!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		} else {
 			List<CartProductInfoDto> newGoodsInfoList = new ArrayList<CartProductInfoDto>();
-			// ´î¶q
-			if (productNo < queryGoodsInfoList.size()) {
-				int no = queryGoodsInfoList.size() - productNo;
-				for (int i = 0; i <  no; i++) {
-					modifyAmount = modifyAmount + queryGoodsInfoList.get(i).getAmount();
-					newGoodsInfoList.add(queryGoodsInfoList.get(i));
+			try {
+				// æ¸›é‡
+				if (productNo < queryGoodsInfoList.size()) {
+					int no = queryGoodsInfoList.size() - productNo;
+					for (int i = 0; i <  no; i++) {
+						modifyAmount = modifyAmount + queryGoodsInfoList.get(i).getAmount();
+						newGoodsInfoList.add(queryGoodsInfoList.get(i));
+					}
+					cartProductRepository.deleteAll(newGoodsInfoList);
+					logger.info("cartProductRepository.deleteAll: " + queryGoodsInfoList.size());
+				} 
+				// è¿½åŠ 
+				else {
+					// å–å¾—å•†å“ç·¨è™Ÿ
+					String producId = queryGoodsInfoList.get(0).getProductId();
+					Map goodsMap = new HashMap();
+					try {
+						goodsMap = cartInfoService.getGoodsBygoodsId(producId);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+						goodsMap = cartInfoService.getGoodsBygoodsId(producId);
+					}
+					// å•†å“æ•¸é‡
+					int inventory = Integer.valueOf(goodsMap.get("inventory").toString());
+					// å•†å“é‡‘é¡
+					int amount = Integer.valueOf(goodsMap.get("unitPrice").toString());
+					// å•†å“åç¨±
+					String goodsName = goodsMap.get("goodsName").toString();
+					int tempAmount = 0;
+					// è‹¥å•†å“æ•¸é‡æ­¸0
+					if (inventory == 0) {
+						throw new CartsProcessException("ç›®å‰å·²ç„¡è©²å•†å“!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+					}
+					for (int i = 0; i < productNo - queryGoodsInfoList.size(); i++) {
+						cartInfoService.saveCartProductInfoDto(modifyGoodsReq.getCartNumber(), producId, goodsName, amount, modifyGoodsReq.getCustomer(),
+								modifyGoodsReq.getCustomer(), new Date());
+						tempAmount = tempAmount + amount;
+					}
+					modifyAmount = cartInfoDto.getAmount() + tempAmount;
 				}
-				cartProductRepository.deleteAll(newGoodsInfoList);
-				logger.info("cartProductRepository.deleteAll: " + queryGoodsInfoList.size());
-			} 
-			// °l¥[
-			else {
-				// ¨ú±o°Ó«~½s¸¹
-				String producId = queryGoodsInfoList.get(0).getProductId();
-				Map goodsMap = new HashMap();
-				try {
-					goodsMap = cartInfoService.getGoodsBygoodsId(producId);
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-					goodsMap = cartInfoService.getGoodsBygoodsId(producId);
-				}
-				// °Ó«~¼Æ¶q
-				int inventory = Integer.valueOf(goodsMap.get("inventory").toString());
-				// °Ó«~ª÷ÃB
-				int amount = Integer.valueOf(goodsMap.get("unitPrice").toString());
-				// °Ó«~¦WºÙ
-				String goodsName = goodsMap.get("goodsName").toString();
-				int tempAmount = 0;
-				// ­Y°Ó«~¼Æ¶qÂk0
-				if (inventory == 0) {
-					throw new CartsProcessException("¥Ø«e¤wµL¸Ó°Ó«~!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
-				}
-				for (int i = 0; i < productNo - queryGoodsInfoList.size(); i++) {
-					cartInfoService.saveCartProductInfoDto(modifyGoodsReq.getCartNumber(), producId, goodsName, amount, modifyGoodsReq.getCustomer(),
-							modifyGoodsReq.getCustomer(), new Date());
-					tempAmount = tempAmount + amount;
-				}
-				modifyAmount = cartInfoDto.getAmount() + tempAmount;
+				
+				// æ›´æ–°æ‰€æœ‰è³¼ç‰©è»Šè©²å•†å“è©³ç´°æ™‚é–“
+				queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(modifyGoodsReq.getCartNumber(), 
+						modifyGoodsReq.getCustomer(), modifyGoodsReq.getProductId());
+				queryGoodsInfoList.forEach( tempQueryGoodsInfo -> {
+					tempQueryGoodsInfo.setLastModifiedDate(new Date());
+					cartProductRepository.save(tempQueryGoodsInfo);
+				});
+				
+				// ä¿®æ”¹è³¼ç‰©è»Šç¸½é‡‘é¡
+				cartInfoDto.setAmount(modifyAmount);
+				cartInfoDto.setLastModifiedBy(modifyGoodsReq.getCustomer());
+				cartInfoDto.setLastModifiedDate(new Date());
+				cartInfoRepository.save(cartInfoDto);
+				logger.info("cartInfoRepository.save: " + cartInfoDto);
+				// æ›´æ–°å®Œå¾Œ, å–æœ€æ–°æ›´æ–°è³‡æ–™å›å‚³
+				finallyQueryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(modifyGoodsReq.getCartNumber(), 
+						modifyGoodsReq.getCustomer(), modifyGoodsReq.getProductId());
+			} catch (Exception e) {
+				throw new CartsProcessException("ä¿®æ”¹å•†å“è³‡æ–™éŒ¯èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 			}
-			
-			// §ó·s©Ò¦³ÁÊª«¨®¸Ó°Ó«~¸Ô²Ó®É¶¡
-			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(modifyGoodsReq.getCartNumber(), 
-					modifyGoodsReq.getCustomer(), modifyGoodsReq.getProductId());
-			queryGoodsInfoList.forEach( tempQueryGoodsInfo -> {
-				tempQueryGoodsInfo.setLastModifiedDate(new Date());
-				cartProductRepository.save(tempQueryGoodsInfo);
-			});
-			
-			// ­×§ïÁÊª«¨®Á`ª÷ÃB
-			cartInfoDto.setAmount(modifyAmount);
-			cartInfoDto.setLastModifiedBy(modifyGoodsReq.getCustomer());
-			cartInfoDto.setLastModifiedDate(new Date());
-			cartInfoRepository.save(cartInfoDto);
-			logger.info("cartInfoRepository.save: " + cartInfoDto);
 		}
-		
-		// §ó·s§¹«á, ¨ú³Ì·s§ó·s¸ê®Æ¦^¶Ç
-		List<CartProductInfoDto> finallyQueryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(modifyGoodsReq.getCartNumber(), 
-				modifyGoodsReq.getCustomer(), modifyGoodsReq.getProductId());
+
 		return ModifyGoodsResp.success(finallyQueryGoodsInfoList);
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "/queryCarts")
-    @ApiOperation(value = "¨ú±oÁÊª«¨®²M³æ", notes = "¨ú±oÁÊª«¨®²M³æ")
-	public QueryCartResp queryCarts(@ApiParam(required = true, value = "¨ú±oÁÊª«¨®²M³æ") @RequestBody QueryCartReq queryCartReq) {
-		List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(), 
-				queryCartReq.getCustomer());
-		// Á`ª÷ÃB
+    @ApiOperation(value = "å–å¾—è³¼ç‰©è»Šæ¸…å–®", notes = "å–å¾—è³¼ç‰©è»Šæ¸…å–®")
+	public QueryCartResp queryCarts(@ApiParam(required = true, value = "å–å¾—è³¼ç‰©è»Šæ¸…å–®") @RequestBody QueryCartReq queryCartReq) {
+		List<CartProductInfoDto> queryGoodsInfoList = new ArrayList<CartProductInfoDto>();
+		// ç¸½é‡‘é¡
 		Integer allAmount = 0;
-		for (CartProductInfoDto temp : queryGoodsInfoList) {
-			allAmount = allAmount + temp.getAmount();
+		try {
+			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(), 
+					queryCartReq.getCustomer());
+
+			for (CartProductInfoDto temp : queryGoodsInfoList) {
+				allAmount = allAmount + temp.getAmount();
+			}
+		} catch (Exception e) {
+			throw new CartsProcessException("å–å¾—è³¼ç‰©è»Šæ¸…å–®éŒ¯èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
 		}
 		
 		return QueryCartResp.success(queryGoodsInfoList, allAmount);
@@ -334,14 +353,19 @@ public class CartsProcessController {
 	
 	@ResponseBody
 	@GetMapping(value = "/queryCartsNo")
-    @ApiOperation(value = "¨ú±o°Ó«~¸Ô²Ó¼Æ¶q", notes = "¨ú±o°Ó«~¸Ô²Ó¼Æ¶q")
-	public QueryCartNoResp queryCartsNo(@ApiParam(required = true, value = "¨ú±o°Ó«~¸Ô²Ó¼Æ¶q") @RequestBody QueryCartNoReq queryCartNoReq) {
-		List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(queryCartNoReq.getCartNumber(), 
-				queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
-		// Á`ª÷ÃB
+    @ApiOperation(value = "å–å¾—å•†å“è©³ç´°æ•¸é‡", notes = "å–å¾—å•†å“è©³ç´°æ•¸é‡")
+	public QueryCartNoResp queryCartsNo(@ApiParam(required = true, value = "å–å¾—å•†å“è©³ç´°æ•¸é‡") @RequestBody QueryCartNoReq queryCartNoReq) {
+		List<CartProductInfoDto> queryGoodsInfoList = new ArrayList<CartProductInfoDto>();
+		// ç¸½é‡‘é¡
 		Integer allAmount = 0;
-		for (CartProductInfoDto temp : queryGoodsInfoList) {
-			allAmount = allAmount + temp.getAmount();
+		try {
+			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(queryCartNoReq.getCartNumber(), 
+					queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
+			for (CartProductInfoDto temp : queryGoodsInfoList) {
+				allAmount = allAmount + temp.getAmount();
+			}
+		} catch (Exception e) {
+			throw new CartsProcessException("å–å¾—è³¼ç‰©è»Šæ¸…å–®éŒ¯èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
 		}
 		
 		return QueryCartNoResp.success(queryGoodsInfoList, queryGoodsInfoList.size(), allAmount);
@@ -350,63 +374,69 @@ public class CartsProcessController {
 	@ResponseBody
 	@Transactional
 	@PutMapping(value = "/addCart")
-    @ApiOperation(value = "·s¼W°Ó«~", notes = "·s¼W°Ó«~")
-	public AddCartResp addCart(@ApiParam(required = true, value = "·s¼W°Ó«~") @RequestBody AddCartReq addCartReq) {
-		// ©I¥sAPI¬d¸ß°Ó«~¸ê°T
+    @ApiOperation(value = "æ–°å¢å•†å“", notes = "æ–°å¢å•†å“")
+	public AddCartResp addCart(@ApiParam(required = true, value = "æ–°å¢å•†å“") @RequestBody AddCartReq addCartReq) {
+		// å‘¼å«APIæŸ¥è©¢å•†å“è³‡è¨Š
 		Map goodsMap = cartInfoService.getGoodsBygoodsId(addCartReq.getProductId());
-		// °Ó«~¼Æ¶q
+		// å•†å“æ•¸é‡
 		Integer inventory = Integer.valueOf(goodsMap.get("inventory").toString());
-		// °Ó«~ª÷ÃB
+		// å•†å“é‡‘é¡
 		Integer amount = Integer.valueOf(goodsMap.get("unitPrice").toString());
-		// ÁÊ¶R¤H
+		// è³¼è²·äºº
 		String customer = addCartReq.getCustomer();
-		// °Ó«~¥N¸¹
+		// å•†å“ä»£è™Ÿ
 		String goodsId = goodsMap.get("goodsId").toString();
-		// °Ó«~¦WºÙ
+		// å•†å“åç¨±
 		String goodsName = goodsMap.get("goodsName").toString();
-		// ·s¼W »P §ó§ï ®É¶¡
+		// æ–°å¢ èˆ‡ æ›´æ”¹ æ™‚é–“
 		Date date = new Date();
 		GoodsInfo goodsInfo = new GoodsInfo();
 		
-		// ©I¥sAPI¬dµL°Ó«~°T®§, ªğ¦^¿ù»~°T®§
+		// å‘¼å«APIæŸ¥ç„¡å•†å“è¨Šæ¯, è¿”å›éŒ¯èª¤è¨Šæ¯
 		if (goodsMap == null || inventory == 0) {
-			throw new CartsProcessException("¥Ø«e¤wµL¸Ó°Ó«~!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+			throw new CartsProcessException("ç›®å‰å·²ç„¡è©²å•†å“!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		} 
-		// ¦³°Ó«~°T®§
+//		else if (customer.length() > 10 || goodsId.length() > 10) {
+//			throw new CartsProcessException("å®¢æˆ¶åç¨±æˆ–å•†å“ä»£è™Ÿé•·åº¦éŒ¯èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+//		}
+		// æœ‰å•†å“è¨Šæ¯
 		else {
-			
-			// ÁÊª«¨®½s¸¹
+			// è³¼ç‰©è»Šç·¨è™Ÿ
 			String cartNumber = addCartReq.getCartNumber();
 			CartInfoDto cartInfoDto = cartInfoService.getCartInfo(cartNumber);
 			List<CartProductInfoDto> cartProductInfoList = cartInfoService.getCartProductInfo(cartNumber);
 			
-			// ­YÁÊª«¨®¦³¸ê°T, «h¶i¦æÁÊª«¨®ª÷ÃB§ó·s & °Ó«~¸Ô²Ó·s¼W
-			if (cartInfoDto != null) {
-				Integer amountTemp = cartInfoDto.getAmount() + amount;
-				cartInfoService.saveCartInfoDto(cartNumber, customer, amountTemp, customer, customer, date);
-				cartInfoService.saveCartProductInfoDto(cartNumber, goodsId, goodsName, amount, customer, customer, date);
-				
-			}
-			// ÁÊª«¨®¨S¸ê°T, ¥ş³¡·s¼W
-			else {
-				// ·s¼W¸ê®Æ CART
-				cartInfoService.saveCartInfoDto(cartNumber, customer, amount, customer, customer, date);
-				// ·s¼W¸ê®Æ CART_PRODUCT
-				if (CollectionUtils.isEmpty(cartProductInfoList)) {
+			try {
+				// è‹¥è³¼ç‰©è»Šæœ‰è³‡è¨Š, å‰‡é€²è¡Œè³¼ç‰©è»Šé‡‘é¡æ›´æ–° & å•†å“è©³ç´°æ–°å¢
+				if (cartInfoDto != null) {
+					Integer amountTemp = cartInfoDto.getAmount() + amount;
+					cartInfoService.saveCartInfoDto(cartNumber, customer, amountTemp, customer, customer, date);
 					cartInfoService.saveCartProductInfoDto(cartNumber, goodsId, goodsName, amount, customer, customer, date);
+					
 				}
+				// è³¼ç‰©è»Šæ²’è³‡è¨Š, å…¨éƒ¨æ–°å¢
+				else {
+					// æ–°å¢è³‡æ–™ CART
+					cartInfoService.saveCartInfoDto(cartNumber, customer, amount, customer, customer, date);
+					// æ–°å¢è³‡æ–™ CART_PRODUCT
+					if (CollectionUtils.isEmpty(cartProductInfoList)) {
+						cartInfoService.saveCartProductInfoDto(cartNumber, goodsId, goodsName, amount, customer, customer, date);
+					}
+				}
+				
+				SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+				String formatDate = sdFormat.format(date);
+				goodsInfo.setGoodsId(goodsId);
+				goodsInfo.setGoodsName(goodsName);
+				goodsInfo.setInventory(inventory);
+				goodsInfo.setUnitPrice(amount);
+				goodsInfo.setCreatedBy(customer);
+				goodsInfo.setCreatedDate(formatDate);
+				goodsInfo.setLastModifiedBy(customer);
+				goodsInfo.setLastModifiedDate(formatDate);
+			} catch (Exception e) {
+				throw new CartsProcessException("æ–°å¢å•†å“éŒ¯èª¤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
 			}
-			
-			SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-			String formatDate = sdFormat.format(date);
-			goodsInfo.setGoodsId(goodsId);
-			goodsInfo.setGoodsName(goodsName);
-			goodsInfo.setInventory(inventory);
-			goodsInfo.setUnitPrice(amount);
-			goodsInfo.setCreatedBy(customer);
-			goodsInfo.setCreatedDate(formatDate);
-			goodsInfo.setLastModifiedBy(customer);
-			goodsInfo.setLastModifiedDate(formatDate);
 		}
 		
 		return AddCartResp.success(goodsInfo);

@@ -5,16 +5,16 @@ import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "´ú¸Õ½Ğ¨D")
+@ApiModel(description = "æ¸¬è©¦è«‹æ±‚")
 public class testReq {
     
-    @ApiModelProperty(value = "ÁÊª«¨®½s¸¹", required = true, position = 1)
+    @ApiModelProperty(value = "è³¼ç‰©è»Šç·¨è™Ÿ", required = true, position = 1)
     private String cartNumber;
 
-	@ApiModelProperty(value = "«È¤á¦WºÙ", required = true, position = 2)
+	@ApiModelProperty(value = "å®¢æˆ¶åç¨±", required = true, position = 2)
     private String customer;
     
-    @ApiModelProperty(value = "ª÷ÃB", required = true, position = 3)
+    @ApiModelProperty(value = "é‡‘é¡", required = true, position = 3)
     private Integer amount;
     
     private String createdBy;
