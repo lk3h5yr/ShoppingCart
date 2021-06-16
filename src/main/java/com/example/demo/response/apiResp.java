@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "流程回覆")
-public class apiResponse {
+public class apiResp {
 
     @ApiModelProperty(value = "回應代碼(0:成功、1:失敗)", required = true, position = 1)
     private int rtnCode;
@@ -18,45 +18,45 @@ public class apiResponse {
     protected static final String SUCCESS = "success";
     protected static final String FAIL = "fail";
 
-    public static apiResponse success() {
-        apiResponse apiSuccess = new apiResponse();
+    public static apiResp success() {
+        apiResp apiSuccess = new apiResp();
         apiSuccess.setRtnCode(0);
         apiSuccess.setMsg(SUCCESS);
         return apiSuccess;
     }
 
-    public static apiResponse success(Object data) {
-        apiResponse apiSuccess = new apiResponse();
+    public static apiResp success(Object data) {
+        apiResp apiSuccess = new apiResp();
         apiSuccess.setRtnCode(0);
         apiSuccess.setMsg(SUCCESS);
         apiSuccess.setData(data);
         return apiSuccess;
     }
 
-    public static apiResponse success(String message, Object data) {
-        apiResponse apiSuccess = new apiResponse();
+    public static apiResp success(String message, Object data) {
+        apiResp apiSuccess = new apiResp();
         apiSuccess.setRtnCode(0);
         apiSuccess.setMsg(message);
         apiSuccess.setData(data);
         return apiSuccess;
     }
 
-    public static apiResponse fail() {
-        apiResponse apiFail = new apiResponse();
+    public static apiResp fail() {
+        apiResp apiFail = new apiResp();
         apiFail.setRtnCode(1);
         apiFail.setMsg(FAIL);
         return apiFail;
     }
 
-    public static apiResponse fail(String failMsg) {
-        apiResponse apiFail = new apiResponse();
+    public static apiResp fail(String failMsg) {
+        apiResp apiFail = new apiResp();
         apiFail.setRtnCode(1);
         apiFail.setMsg(failMsg);
         return apiFail;
     }
     
-    public static apiResponse fail(String failMsg, int rtnCode) {
-        apiResponse apiFail = new apiResponse();
+    public static apiResp fail(String failMsg, int rtnCode) {
+        apiResp apiFail = new apiResp();
         apiFail.setMsg(failMsg);
         apiFail.setRtnCode(rtnCode);
         return apiFail;

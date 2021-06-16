@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "測試回覆")
-public class testResponse extends apiResponse {
+public class testResp extends apiResp {
 	
     @ApiModelProperty(value = "結果", example = "true", position = 3)
     private Boolean data;
 
-    public static testResponse success(Boolean data) {
-    	testResponse apiSuccess = new testResponse();
+    public static testResp success(Boolean data) {
+    	testResp apiSuccess = new testResp();
         apiSuccess.setRtnCode(0);
         apiSuccess.setMsg(SUCCESS);
         apiSuccess.setData(data);

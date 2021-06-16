@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "取得購物清單")
-public class QueryCartResponse extends apiResponse {
+public class QueryCartResp extends apiResp {
 	
     @ApiModelProperty(value = "結果", example = "true", position = 4)
     private List<CartProductInfoDto> data;
@@ -17,8 +17,8 @@ public class QueryCartResponse extends apiResponse {
     @ApiModelProperty(value = "總金額", example = "true", position = 3)
     private Integer allAmount;
 
-	public static QueryCartResponse success(List<CartProductInfoDto> data, Integer allAmount) {
-    	QueryCartResponse apiSuccess = new QueryCartResponse();
+	public static QueryCartResp success(List<CartProductInfoDto> data, Integer allAmount) {
+    	QueryCartResp apiSuccess = new QueryCartResp();
         apiSuccess.setRtnCode(0);
         apiSuccess.setMsg(SUCCESS);
         apiSuccess.setData(data);

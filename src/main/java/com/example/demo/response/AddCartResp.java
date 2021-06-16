@@ -6,13 +6,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "新增商品")
-public class AddCartResponse extends apiResponse {
+public class AddCartResp extends apiResp {
 	
     @ApiModelProperty(value = "結果", example = "true", position = 3)
     private GoodsInfo data;
 
-    public static AddCartResponse success(GoodsInfo data) {
-    	AddCartResponse apiSuccess = new AddCartResponse();
+    public static AddCartResp success(GoodsInfo data) {
+    	AddCartResp apiSuccess = new AddCartResp();
     	if (data == null) {
             apiSuccess.setRtnCode(1);
             apiSuccess.setMsg(FAIL);

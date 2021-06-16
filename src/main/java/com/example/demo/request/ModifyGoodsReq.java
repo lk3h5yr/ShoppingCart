@@ -3,8 +3,8 @@ package com.example.demo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "刪除商品")
-public class DeleteGoodsReq {
+@ApiModel(description = "修改商品數量")
+public class ModifyGoodsReq {
 	
 	@ApiModelProperty(value = "商品編號", required = true, position = 1)
 	String productId;
