@@ -9,9 +9,6 @@ public class DeleteGoodsReq {
 	@ApiModelProperty(value = "商品編號", required = true, position = 1)
 	String productId;
 	
-	@ApiModelProperty(value = "商品數量", required = true, position = 4)
-	Integer productNo;
-	
 	@ApiModelProperty(value = "購物車編號", required = true, position = 2)
 	String cartNumber;
 
@@ -42,11 +39,4 @@ public class DeleteGoodsReq {
 		this.productId = productId;
 	}
 	
-	public Integer getProductNo() {
-		return productNo;
-	}
-
-	public void setProductNo(Integer productNo) {
-		this.productNo = productNo;
-	}
 }

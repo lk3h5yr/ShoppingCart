@@ -14,13 +14,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import feign.Request.HttpMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.oas.annotations.EnableOpenApi;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.BasicAuth;
@@ -29,6 +30,7 @@ import springfox.documentation.service.GrantType;
 import springfox.documentation.service.OAuth;
 import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -56,6 +58,14 @@ public class OpenAPIConfig {
   @Bean
   public Docket api() {
     // @formatter:off
+	  ModelRef errorModel = new ModelRef("RestApiExceptionModel");
+	  List<ResponseMessage> responseMessages = Arrays.asList(
+              new ResponseMessageBuilder().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(errorModel).build(),
+              new ResponseMessageBuilder().code(HttpStatus.METHOD_NOT_ALLOWED.value()).message(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase()).responseModel(errorModel).build(),
+              new ResponseMessageBuilder().code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()).message(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase()).responseModel(errorModel).build(),
+              new ResponseMessageBuilder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(errorModel).build());
+
+	  
     return new Docket(DocumentationType.SWAGGER_2)
         // 為了顯示 CompletableFuture 內的 DTO 描述
         .genericModelSubstitutes(ResponseEntity.class, CompletableFuture.class)
@@ -63,10 +73,10 @@ public class OpenAPIConfig {
          .securitySchemes(this.securitySchemes())
          .useDefaultResponseMessages(false)
 //         .additionalModels(new TypeResolver().resolve(ErrorMsg.class))
-//         .globalResponses(HttpMethod.GET, this.getGlobalResonseMessage())
-//         .globalResponses(HttpMethod.POST, this.getGlobalResonseMessage())
-//         .globalResponses(HttpMethod.PUT, this.getGlobalResonseMessage())
-//         .globalResponses(HttpMethod.DELETE, this.getGlobalResonseMessage())
+         .globalResponseMessage(RequestMethod.GET, responseMessages)
+         .globalResponseMessage(RequestMethod.POST, responseMessages)
+         .globalResponseMessage(RequestMethod.PUT, responseMessages)
+         .globalResponseMessage(RequestMethod.DELETE, responseMessages)
         .apiInfo(this.apiInfo())
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.example.demo"))

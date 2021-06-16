@@ -11,4 +11,6 @@ public interface CartInfoRepository extends CrudRepository<CartInfoDto, String>,
 
 	CartInfoDto getCartInfoDtoBycartNumber(String cartNumber);
 	
+	void deleteBycartNumber(String cartNumber);
+	
 }
