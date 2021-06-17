@@ -332,20 +332,16 @@ public class CartsProcessController {
 	@GetMapping(value = "/queryCarts")
     @ApiOperation(value = "取得購物車清單", notes = "取得購物車清單")
 	public QueryCartResp queryCarts(@ApiParam(required = true, value = "取得購物車清單") @RequestBody QueryCartReq queryCartReq) {
-		List<CartProductInfoDto> queryGoodsInfoList = new ArrayList<CartProductInfoDto>();
 		// 總金額
 		Integer allAmount = 0;
-		try {
-			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(),
-					queryCartReq.getCustomer());
-			if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
-				throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
-			}
-			for (CartProductInfoDto temp : queryGoodsInfoList) {
-				allAmount = allAmount + temp.getAmount();
-			}
-		} catch (Exception e) {
-			throw new CartsProcessException("取得購物車清單錯誤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+		List<CartProductInfoDto>  queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(),
+				queryCartReq.getCustomer());
+		if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
+			throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+		}
+		
+		for (CartProductInfoDto temp : queryGoodsInfoList) {
+			allAmount = allAmount + temp.getAmount();
 		}
 		
 		return QueryCartResp.success(queryGoodsInfoList, allAmount);
@@ -355,20 +351,16 @@ public class CartsProcessController {
 	@GetMapping(value = "/queryCartsNo")
     @ApiOperation(value = "取得商品詳細數量", notes = "取得商品詳細數量")
 	public QueryCartNoResp queryCartsNo(@ApiParam(required = true, value = "取得商品詳細數量") @RequestBody QueryCartNoReq queryCartNoReq) {
-		List<CartProductInfoDto> queryGoodsInfoList = new ArrayList<CartProductInfoDto>();
 		// 總金額
 		Integer allAmount = 0;
-		try {
-			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(
-					queryCartNoReq.getCartNumber(), queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
-			if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
-				throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
-			}
-			for (CartProductInfoDto temp : queryGoodsInfoList) {
-				allAmount = allAmount + temp.getAmount();
-			}
-		} catch (Exception e) {
-			throw new CartsProcessException("取得購物車清單錯誤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+		List<CartProductInfoDto> queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId( queryCartNoReq.getCartNumber(), 
+				queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
+		if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
+			throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.NOT_FOUND.value());
+		}
+		
+		for (CartProductInfoDto temp : queryGoodsInfoList) {
+			allAmount = allAmount + temp.getAmount();
 		}
 		
 		return QueryCartNoResp.success(queryGoodsInfoList, queryGoodsInfoList.size(), allAmount);
@@ -399,9 +391,9 @@ public class CartsProcessController {
 		if (goodsMap == null || inventory == 0) {
 			throw new CartsProcessException("目前已無該商品!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
 		} 
-//		else if (customer.length() > 10 || goodsId.length() > 10) {
-//			throw new CartsProcessException("客戶名稱或商品代號長度錯誤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
-//		}
+		else if (customer.length() > 10 || goodsId.length() > 10) {
+			throw new CartsProcessException("客戶名稱或商品代號長度錯誤!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value());
+		}
 		// 有商品訊息
 		else {
 			// 購物車編號
