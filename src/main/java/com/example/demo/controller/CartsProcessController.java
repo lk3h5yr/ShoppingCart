@@ -1,26 +1,5 @@
 package com.example.demo.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.entity.GoodsInfo;
 import com.example.demo.entity.OrderInfo;
 import com.example.demo.exceptions.CartsProcessException;
@@ -51,6 +30,25 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/")
@@ -161,7 +159,7 @@ public class CartsProcessController {
 				}
 				List<CartProductInfoDto> cartProductInfo = cartProductRepository.findByCartNumberAndCreatedBy(orderReq.getCartNumber(), orderReq.getCustomer());
 				List<Map> tempListMap = new ArrayList<Map>();
-				orderInfoList.forEach( temp -> {
+				orderInfoList.forEach(temp -> {
 					Map tempMap = new HashMap();
 					tempMap.put("goodsId", temp.getGoodsId());
 					tempMap.put("goodsName", temp.getGoodsName());
@@ -338,9 +336,11 @@ public class CartsProcessController {
 		// 總金額
 		Integer allAmount = 0;
 		try {
-			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(), 
+			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedBy(queryCartReq.getCartNumber(),
 					queryCartReq.getCustomer());
-
+			if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
+				throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+			}
 			for (CartProductInfoDto temp : queryGoodsInfoList) {
 				allAmount = allAmount + temp.getAmount();
 			}
@@ -359,8 +359,11 @@ public class CartsProcessController {
 		// 總金額
 		Integer allAmount = 0;
 		try {
-			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(queryCartNoReq.getCartNumber(), 
-					queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
+			queryGoodsInfoList = cartProductRepository.findByCartNumberAndCreatedByAndProductId(
+					queryCartNoReq.getCartNumber(), queryCartNoReq.getCustomer(), queryCartNoReq.getProductId());
+			if (CollectionUtils.isEmpty(queryGoodsInfoList)) {
+				throw new CartsProcessException("查無資料!", ExceptionStatus.INPUT_PARAMETER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+			}
 			for (CartProductInfoDto temp : queryGoodsInfoList) {
 				allAmount = allAmount + temp.getAmount();
 			}
